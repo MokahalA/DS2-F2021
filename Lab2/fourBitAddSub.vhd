@@ -19,25 +19,31 @@ entity fourBitAddSub is
 end fourBitAddSub ;
 
 architecture arch of fourBitAddSub is
-    SIGNAL int_Sum, int_CarryOut : STD_LOGIC_VECTOR(3 downto 0);
+    SIGNAL int_Sum, int_CarryOut: STD_LOGIC_VECTOR(3 downto 0);
+    SIGNAL int_Y : STD_LOGIC_VECTOR(3 downto 0);
 
-    COMPONENT oneBitFullAddSub
-    port (
-        addSub : IN STD_LOGIC; -- add'Sub
+    COMPONENT oneBitFullAdder
+      port (
         i_A, i_B : IN STD_LOGIC;   -- 1-bit inputs
         i_carryIn : IN STD_LOGIC;  -- carry input
         o_S : OUT STD_LOGIC;        -- sum output
         o_carryOut: OUT STD_LOGIC   -- carry output
-    ) ;
+      ) ;
     END COMPONENT;
 
 begin
 
+    -- Signals 
+    int_Y(3) <= i_Y(3) xor addSub;
+    int_Y(2) <= i_Y(2) xor addSub;
+    int_Y(1) <= i_Y(1) xor addSub;
+    int_Y(0) <= i_Y(0) xor addSub;
+
     -- MSB is 3
-    add0: oneBitFullAddSub port map(addSub, i_X(0), i_Y(0), addSub , int_Sum(0), int_CarryOut(0));
-    add1: oneBitFullAddSub port map(addSub, i_X(1), i_Y(1), int_CarryOut(0), int_Sum(1), int_CarryOut(1));
-    add2: oneBitFullAddSub port map(addSub, i_X(2), i_Y(2), int_CarryOut(1), int_Sum(2), int_CarryOut(2));
-    add3: oneBitFullAddSub port map(addSub, i_X(3), i_Y(3), int_CarryOut(2), int_Sum(3), int_CarryOut(3));
+    fa0: oneBitFullAdder port map(i_X(0), int_Y(0), addSub, int_Sum(0), int_CarryOut(0));
+    fa1: oneBitFullAdder port map(i_X(1), int_Y(1), int_CarryOut(0), int_Sum(1), int_CarryOut(1));
+    fa2: oneBitFullAdder port map(i_X(2), int_Y(2), int_CarryOut(1), int_Sum(2), int_CarryOut(2));
+    fa3: oneBitFullAdder port map(i_X(3), int_Y(3), int_CarryOut(2), int_Sum(3), int_CarryOut(3));
 
     -- Output Driver
 	o_Sum <= int_Sum;
