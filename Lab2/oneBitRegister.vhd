@@ -1,9 +1,11 @@
---------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
 -- Title         : 1-bit Register
--------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
 -- File          : oneBitRegister.vhd
--------------------------------------------------------------------------------
--- Description : This file creates a 1-bit register for storing data.
+-----------------------------------------------------------------------------------
+-- Description : This file creates a 1-bit register for storing the "DONE" register
+-- 
+-- i_load = 1, i_resetBar = 1 for resetDone, setDone = 1, o_Value = DONE;
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
@@ -12,8 +14,8 @@ ENTITY oneBitRegister IS
 	PORT(
 		i_resetBar, i_load	: IN	STD_LOGIC;
 		i_clock			: IN	STD_LOGIC;
-		i_Value			: IN	STD_LOGIC; -- bit input
-		o_Value			: OUT	STD_LOGIC); -- bit output
+		setDone			: IN	STD_LOGIC;
+		o_Value			: OUT	STD_LOGIC);
 END oneBitRegister;
 
 ARCHITECTURE rtl OF oneBitRegister IS
@@ -30,9 +32,10 @@ ARCHITECTURE rtl OF oneBitRegister IS
 
 BEGIN
 
+
 bit0: enARdFF_2
 	PORT MAP (i_resetBar => i_resetBar,
-			  i_d => i_Value, 
+			  i_d => setDone, 
 			  i_enable => i_load,
 			  i_clock => i_clock,
 			  o_q => int_Value,
