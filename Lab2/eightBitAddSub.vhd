@@ -36,7 +36,6 @@ begin
     -- Signals 
     int_Y(7) <= i_Y(7) xor addSub;
     int_Y(6) <= i_Y(6) xor addSub;
-    int_Y(6) <= i_Y(6) xor addSub;
     int_Y(5) <= i_Y(5) xor addSub;
     int_Y(4) <= i_Y(4) xor addSub;
     int_Y(3) <= i_Y(3) xor addSub;

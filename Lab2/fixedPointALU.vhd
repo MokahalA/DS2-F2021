@@ -13,7 +13,7 @@ entity fixedPointALU is
     GClock, GReset: IN STD_LOGIC;
     opA, opB : IN STD_LOGIC_VECTOR(3 downto 0);
     opSelect : IN STD_LOGIC_VECTOR(1 downto 0);
-    muxOut : OUT STD_LOGIC_VECTOR(7 downto 0);
+    muxOut : OUT STD_LOGIC_VECTOR(7 downto 0); -- 8-bit binary output --
     CarryOut, ZeroOut, OverflowOut : OUT STD_LOGIC
   ) ;
 end fixedPointALU ;
@@ -57,8 +57,17 @@ architecture arch of fixedPointALU is
     ) ;
   END COMPONENT;
 
+  COMPONENT topdiv 
+    port (
+      A,B : IN STD_LOGIC_VECTOR(3 downto 0);
+      i_gclock, i_greset : IN STD_LOGIC;
+      QQ,RR,AA,BB: OUT STD_LOGIC_VECTOR(3 downto 0)
+    ) ;
+  END COMPONENT;
+
   -- internal signals --
   SIGNAL int_opA, int_opB : STD_LOGIC_VECTOR(3 downto 0); --use these for multiplication/division
+  SIGNAL int_QQ, int_RR : STD_LOGIC_VECTOR(3 downto 0);
   SIGNAL int_A, int_B : STD_LOGIC_VECTOR(7 downto 0);
   SIGNAL int_sum : STD_LOGIC_VECTOR(3 downto 0);
   SIGNAL int_muxOut, int_sumOut, int_prodOut, int_divOut : STD_LOGIC_VECTOR(7 downto 0);
@@ -81,7 +90,6 @@ begin
   int_B(5) <= '0';
   int_B(4) <= '0';
 
-
   int_A(3) <= int_opA(3);
   int_A(2) <= int_opA(2);
   int_A(1) <= int_opA(1);
@@ -94,8 +102,7 @@ begin
 
   adderSub: fourBitAddSub port map(opSelect(0), opA, opB, int_sum, CarryOut);
   mult: multiplierTop port map(GClock, GReset, int_opA, int_opB, int_prodOut);
-  int_divOut <= "00000000";
-  --div: divider port map goes here (GClock, GReset, int_opA, int_opB, int_divOut, int_CarryOut) --
+  div: topdiv port map(int_opA, int_opB, GClock, GReset, int_QQ, int_RR);
 
   int_sumOut(7) <= '0';
   int_sumOut(6) <= '0';
@@ -106,10 +113,20 @@ begin
   int_sumOut(1) <= int_sum(1);
   int_sumOut(0) <= int_sum(0);
 
+  -- Remainder & Quotient to output --
+  int_divOut(7) <= int_RR(3);
+  int_divOut(6) <= int_RR(2);
+  int_divOut(5) <= int_RR(1);
+  int_divOut(4) <= int_RR(0);
+  int_divOut(3) <= int_QQ(3);
+  int_divOut(2) <= int_QQ(2);
+  int_divOut(1) <= int_QQ(1);
+  int_divOut(0) <= int_QQ(0);
+
   opMux: aluMux port map(opSelect, int_sumOut, int_prodOut, int_divOut, int_muxOut);
 
-  muxOut <= int_sumOut;
-  ZeroOut <= not(int_sumOut(7) or int_sumOut(6) or int_sumOut(5) or int_sumOut(4) or int_sumOut(3) or int_sumOut(2) or int_sumOut(1) or int_sumOut(0));
-  OverflowOut <= int_sumOut(3) XOR int_sumOut(2);
+  muxOut <= int_muxOut;
+  ZeroOut <= not(int_muxOut(7) or int_muxOut(6) or int_muxOut(5) or int_muxOut(4) or int_muxOut(3) or int_muxOut(2) or int_muxOut(1) or int_muxOut(0));
+  OverflowOut <= int_muxOut(3) XOR int_muxOut(2);
 
 end architecture ; -- arch
