@@ -15,6 +15,7 @@ entity multiplierDP is
     i_A, i_B : IN STD_LOGIC_VECTOR(3 downto 0); 
     loadA, shiftA : IN STD_LOGIC;  -- set clearA always 0
     loadB, shiftB : IN STD_LOGIC;  -- set clearB always 0 
+    loadP : IN STD_LOGIC;
     addSub, Psel : IN STD_LOGIC; -- addSub = 0 for addition, Psel = 1 for int_Sum 
     setDone, resetDoneBar : IN STD_LOGIC; -- resetDoneBar = 1 for reset
     -- outputs
@@ -96,7 +97,7 @@ begin
     Multiplier: fourBitRSR port map(GReset, GClock, loadB, '0', shiftB, i_B, int_B);
     Adder: eightBitAddSub port map(addSub, int_A, int_P, int_Sum, int_CarryOut);
     mulMux: multiplierMUX port map("00000000", int_Sum, Psel, int_muxOut);
-    Product: eightBitRegister port map(GReset, '1', GClock, int_muxOut, int_P);
+    Product: eightBitRegister port map(GReset, loadP, GClock, int_muxOut, int_P);
     BisZero: fourBitNOR port map("0000", int_B, int_BeqZero); 
     DoneBit: oneBitRegister port map(GReset, '1', GClock, setDone, int_DONE);
 

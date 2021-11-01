@@ -44,15 +44,15 @@ architecture arch of multiplierTop is
             o_loadB, o_shiftB : OUT STD_LOGIC;
             o_addSub, o_Psel : OUT STD_LOGIC;
             o_setDone, o_resetDoneBar : OUT STD_LOGIC;
-            o_state : OUT STD_LOGIC_VECTOR(0 to 3)
+            o_state : OUT STD_LOGIC_VECTOR(0 to 5)
         ) ;
     END COMPONENT;
     
     -- control signals --
-    SIGNAL int_loadA, int_shiftA, int_loadB, int_shiftB : STD_LOGIC;
+    SIGNAL int_loadA, int_shiftA, int_loadB, int_shiftB, int_loadP : STD_LOGIC;
     SIGNAL int_addSub, int_Psel : STD_LOGIC;
     SIGNAL int_setDone, int_resetDoneBar : STD_LOGIC;
-    SIGNAL int_state : STD_LOGIC_VECTOR(0 to 3);
+    SIGNAL int_state : STD_LOGIC_VECTOR(0 to 5);
     
     -- datapath signals --
     SIGNAL int_BeqZero, int_b0, int_DONE : STD_LOGIC;  -- status signals from DP --
@@ -61,8 +61,8 @@ architecture arch of multiplierTop is
 
 begin
     -- instantiation -- 
-    mulDp: multiplierDP port map(GClock, GReset, i_A, i_B, int_loadA, int_shiftA, int_loadB, int_shiftB, int_addSub, int_Psel, int_setDone, int_resetDoneBar, int_BeqZero, int_b0, int_DONE, int_P, int_CarryOut);
-    mulCp: multiplierCP port map(GReset, GClock, int_BeqZero, int_b0, int_DONE, int_loadA, int_shiftA, int_loadB, int_shiftB, int_addSub, int_Psel, int_setDone, int_resetDoneBar, int_state);
+    mulDp: multiplierDP port map(GClock, GReset, i_A, i_B, int_loadA, int_shiftA, int_loadB, int_shiftB, int_loadP, int_addSub, int_Psel, int_setDone, int_resetDoneBar, int_BeqZero, int_b0, int_DONE, int_P, int_CarryOut);
+    mulCp: multiplierCP port map(GReset, GClock, int_BeqZero, int_b0, int_DONE, int_loadA, int_shiftA, int_loadB, int_shiftB, int_loadP, int_addSub, int_Psel, int_setDone, int_resetDoneBar, int_state);
 
     -- output drivers --
     o_P <= int_P;
