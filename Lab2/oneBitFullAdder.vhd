@@ -30,7 +30,7 @@ architecture arch of oneBitFullAdder is
 
   -- Output driver
   o_S <= int_w1 xor i_carryIn;
-  o_carryOut <= int_w2 and int_w3;
+  o_carryOut <= int_w2 or int_w3;
 
 
 end architecture ; -- arch

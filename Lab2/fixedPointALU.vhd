@@ -92,10 +92,11 @@ begin
   int_B(1) <= int_opB(1);
   int_B(0) <= int_opB(0);
 
-  adderSub: fourBitAddSub port map(opSelect(0), opA, opB, int_sum, int_CarryOut);
-  mult: multiplierTop port map(GClock, GReset, int_opA, int_opB, int_prodOut, int_CarryOut);
+  adderSub: fourBitAddSub port map(opSelect(0), opA, opB, int_sum, CarryOut);
+  mult: multiplierTop port map(GClock, GReset, int_opA, int_opB, int_prodOut);
+  int_divOut <= "00000000";
   --div: divider port map goes here (GClock, GReset, int_opA, int_opB, int_divOut, int_CarryOut) --
-  
+
   int_sumOut(7) <= '0';
   int_sumOut(6) <= '0';
   int_sumOut(5) <= '0';
@@ -107,9 +108,8 @@ begin
 
   opMux: aluMux port map(opSelect, int_sumOut, int_prodOut, int_divOut, int_muxOut);
 
-  muxOut <= int_muxOut;
-  CarryOut <= int_CarryOut;
-  ZeroOut <= (not(int_muxOut(7) or int_muxOut(6) or int_muxOut(5) or int_muxOut(4) or int_muxOut(3) or int_muxOut(2) or int_muxOut(1) or int_muxOut(0)));
-  OverflowOut <= (int_muxOut(3) XOR int_muxOut(2));
+  muxOut <= int_sumOut;
+  ZeroOut <= not(int_sumOut(7) or int_sumOut(6) or int_sumOut(5) or int_sumOut(4) or int_sumOut(3) or int_sumOut(2) or int_sumOut(1) or int_sumOut(0));
+  OverflowOut <= int_sumOut(3) XOR int_sumOut(2);
 
 end architecture ; -- arch
