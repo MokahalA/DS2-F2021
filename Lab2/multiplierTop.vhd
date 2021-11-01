@@ -60,7 +60,6 @@ architecture arch of multiplierTop is
     SIGNAL int_CarryOut : STD_LOGIC;
 
 begin
-    int_addSub <= '0';
     -- instantiation -- 
     mulDp: multiplierDP port map(GClock, GReset, i_A, i_B, int_loadA, int_shiftA, int_loadB, int_shiftB, int_addSub, int_Psel, int_setDone, int_resetDoneBar, int_BeqZero, int_b0, int_DONE, int_P, int_CarryOut);
     mulCp: multiplierCP port map(GReset, GClock, int_BeqZero, int_b0, int_DONE, int_loadA, int_shiftA, int_loadB, int_shiftB, int_addSub, int_Psel, int_setDone, int_resetDoneBar, int_state);

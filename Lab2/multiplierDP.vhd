@@ -53,8 +53,8 @@ architecture arch of multiplierDP is
     COMPONENT eightBitAddSub 
         port (
             addSub : IN STD_LOGIC;    -- add'Sub
-            i_X, i_Y : IN STD_LOGIC_VECTOR(7 downto 0); -- 7-bits inputs
-            o_Sum : OUT STD_LOGIC_VECTOR(7 downto 0); -- 7-bit sum output
+            i_X, i_Y : IN STD_LOGIC_VECTOR(7 downto 0); -- 8-bits inputs
+            o_Sum : OUT STD_LOGIC_VECTOR(7 downto 0); -- 8-bit sum output
             o_CarryOut: OUT STD_LOGIC  -- carry output
         );
     END COMPONENT;

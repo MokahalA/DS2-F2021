@@ -48,24 +48,21 @@ architecture arch of multiplierCP is
 begin
 
   int_d(0) <= '0';
-  int_d(1) <= not(i_BeqZero) and i_b0;
-  int_d(2) <= int_state(1) or (not(i_BeqZero) and not(i_b0));
+  int_d(1) <= (int_state(0) and not(i_BeqZero) and i_b0);
+  int_d(2) <= (int_state(1) or (int_state(0) and not(i_BeqZero) and not(i_b0)));
   int_d(3) <= i_BeqZero;
 
 
   -- flip flop instantiation -- 
-  s0: enASdFF port map(i_resetBar, int_d(0), i_clock, '1', int_state(0));
+  s0: enARdFF_2 port map(i_resetBar, int_d(0), '1', i_clock, int_state(0));
   s1: enARdFF_2 port map(i_resetBar, int_d(1), '1', i_clock, int_state(1));
   s2: enARdFF_2 port map(i_resetBar, int_d(2), '1', i_clock, int_state(2));
   s3: enARdFF_2 port map(i_resetBar, int_d(3), '1', i_clock, int_state(3));
 
   -- output drivers -- 
-  o_state <= int_state;
-
-  o_resetDone <= int_state(0);
+  o_resetDoneBar <= int_state(0);
   o_loadA <= int_state(0);
   o_loadB <= int_state(0);
-  o_Psel <= not(int_state(0));  --Psel0
 
   o_Psel <= int_state(1); --Psel1
 
@@ -73,5 +70,7 @@ begin
   o_shiftB <= int_state(2);
 
   o_setDone <= int_state(3);
+
+  o_state <= int_state;
 
 end architecture ; -- arch
