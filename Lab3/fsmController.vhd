@@ -35,6 +35,7 @@ architecture arch of fsmController is
     END COMPONENT;
 
 begin
+    -- FSM controller according to the circuit implementation in figure 4 of the report --
 
     dFF1: enasdFF_2 port map(i_reset, int_D1, '1', i_clk, int_Y1, int_notY1);
     dFF0: enasdFF_2 port map(i_reset, int_D0, '1', i_clk, int_Y0, int_notY0);

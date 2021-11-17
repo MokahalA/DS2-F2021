@@ -47,8 +47,8 @@ architecture arch of Datapath is
 	signal int_reset : STD_LOGIC; 
 	signal int_q : STD_LOGIC_VECTOR(3 downto 0);
 	signal int_MSC, int_SSC, int_MST, int_SST : STD_LOGIC;
-	constant mstValue : STD_LOGIC_VECTOR(3 downto 0) := "0010"; --Preset delay
-	constant sstValue : STD_LOGIC_VECTOR(3 downto 0) := "0010"; --Preset delay
+	constant mstValue : STD_LOGIC_VECTOR(3 downto 0) := "0010"; --Preset delay of ~2 seconds
+	constant sstValue : STD_LOGIC_VECTOR(3 downto 0) := "0010"; --Preset delay of ~2 seconds
 	signal int_resetOut, int_R, int_T, int_notT : STD_LOGIC; 
 
 

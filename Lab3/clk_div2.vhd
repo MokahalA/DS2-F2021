@@ -42,8 +42,8 @@ END COMPONENT;
 	
 BEGIN
 	
-	div1 : clk_div port map ('1',clock,divtodiv);
-	div2 : clk_div port map (divtodiv,clock,clock_1s);
+	div1 : clk_div port map ('1',clock,divtodiv); 
+	div2 : clk_div port map (divtodiv,clock,clock_1s); -- Outputs a 1Hz clock (period = ~1s)
 
 END a;
 

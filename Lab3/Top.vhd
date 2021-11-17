@@ -54,9 +54,9 @@ architecture arch of Top is
 		  ) ;
 	end component fsmController;
 
-	component bcdseg 
+	component bcd7Seg 
 		port(	
-				temps : in std_logic_vector(3 downto 0);
+				timer : in std_logic_vector(3 downto 0);
 				decout: out  std_logic_vector(6 downto 0 );
 				bcdout : out std_logic_vector(6 downto 0 ));
 	end component;
@@ -70,7 +70,7 @@ begin
 
 	int_clkdivsec <= int_ez;
 
-	seg7 : bcdseg port map (temps=>int_timertoseg,bcdout=>timer, decout=>timerDec);
+	seg7 : bcd7Seg port map (timer=>int_timertoseg,bcdout=>timer, decout=>timerDec);
 	clkdivider: clk_div2 port map(GClock, int_ez);
 	deb: debouncer port map(SSCS, int_clkdivsec, int_dSCSS);
 	dp : Datapath port map(int_clkdivsec, GReset, int_sel(0), int_sel(1), int_dSCSS, MSC, SSC, int_timertoseg, int_TimerExpired);
