@@ -66,18 +66,22 @@ architecture arch of lab3Top is
 	signal int_TimerExpired, int_clkdivsec, int_dSCSS, int_ez : STD_LOGIC;
 	signal int_sel : STD_LOGIC_VECTOR(1 downto 0);
 	signal int_timertoseg : std_logic_vector(3 downto 0);
+	signal int_MSTL, int_SSTL : STD_LOGIC(2 downto 0);
 
 begin 
 
 	int_clkdivsec <= int_ez;
-	State <= int_sel; --State information being output for the UART FSM
-	
-	
-	
+	--State <= int_sel; --State information being output for the UART FSM
+	State(0) <=  ( not(int_MSTL(2)) and not(int_MSTL(0)) and int_MSTL(1) and int_SSTL(2) and not(int_SSTL(1)) and not(int_SSTL(0)) ) or ( not(int_MSTL(1)) and not(int_MSTL(0)) and not(int_SSTL(2)) and int_MSTL(2) and int_SSTL(1) );
+	State(1) <= ( int_MSTL(2) and not(int_MSTL(1)) and not(int_MSTL(0)) and not(int_SSTL(2)) and not(int_SSTL(1)) and int_SSTL(0)   ) or ( int_MSTL(2)  not(int_MSTL(1)) and not(int_MSTL(0)) and not(int_SSTL(2)) and int_SSTL(1) and not(int_SSTL(0)));
+
 	seg7 : bcd7Seg port map (timer=>int_timertoseg,bcdout=>timer, decout=>timerDec);
 	clkdivider: clk_div2 port map(GClock, int_ez);
 	deb: debouncer port map(SSCS, int_clkdivsec, int_dSCSS);
 	dp : Datapath port map(int_clkdivsec, GReset, int_sel(0), int_sel(1), int_dSCSS, MSC, SSC, int_timertoseg, int_TimerExpired);
-	ctrl: fsmController port map(int_clkdivsec, GReset, int_dSCSS, int_TimerExpired, MSTL, SSTL, int_sel(1), int_sel(0));
+	ctrl: fsmController port map(int_clkdivsec, GReset, int_dSCSS, int_TimerExpired, int_MSTL, int_SSTL, int_sel(1), int_sel(0));
+
+	MSTL <= int_MSTL;
+	SSTL <= int_SSTL;
 	
 end arch;
