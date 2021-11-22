@@ -71,7 +71,9 @@ begin
 
 	int_clkdivsec <= int_ez;
 	State <= int_sel; --State information being output for the UART FSM
-
+	
+	
+	
 	seg7 : bcd7Seg port map (timer=>int_timertoseg,bcdout=>timer, decout=>timerDec);
 	clkdivider: clk_div2 port map(GClock, int_ez);
 	deb: debouncer port map(SSCS, int_clkdivsec, int_dSCSS);

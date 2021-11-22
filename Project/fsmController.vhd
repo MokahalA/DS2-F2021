@@ -40,9 +40,9 @@ begin
     dFF1: enasdFF_2 port map(i_reset, int_D1, '1', i_clk, int_Y1, int_notY1);
     dFF0: enasdFF_2 port map(i_reset, int_D0, '1', i_clk, int_Y0, int_notY0);
 
-    int_D1 <= ((int_Y1 and not(i_SSCS) and not(i_TimerExpired)) or (int_notY1 and int_Y0 and i_TimerExpired) or (int_Y1 and int_notY0 and i_TimerExpired) or (int_Y1 and int_Y0 and not (i_TimerExpired))); 
-    int_D0 <= ((int_Y0 and not(i_TimerExpired)) or (int_Y1 and int_notY0 and i_TimerExpired) or (int_Y1 and int_notY0 and i_SSCS) or (int_notY0 and i_SSCS and i_TimerExpired));
-
+    int_D1 <= (int_Y1 and not(i_TimerExpired)) or (int_Y1 and int_notY0) or (int_notY1 and int_Y0 and i_TimerExpired);
+    int_D0 <= (int_Y0 and not(i_TimerExpired)) or (int_Y1 and int_notY0 and i_TimerExpired) or (int_notY0 and i_SSCS and i_TimerExpired);
+    
     o_MSTL(2) <= (((int_Y1 and int_notY0) or (int_notY1 and int_Y0 and i_TimerExpired) or (int_Y1 and not(i_TimerExpired))));
     o_MSTL(1) <= ((int_notY1 and int_Y0 and not(i_TimerExpired)) or (int_notY1 and int_notY0 and i_SSCS and i_TimerExpired));
     o_MSTL(0) <= ((int_notY1 and int_notY0 and not(i_TimerExpired)) or (int_notY1 and int_notY0 and not(i_SSCS)) or (int_Y1 and int_Y0 and i_TimerExpired));
@@ -53,6 +53,5 @@ begin
 
     o_sel1 <= int_Y1;
     o_sel0 <= int_Y0;
-
 
 end architecture ; -- arch
