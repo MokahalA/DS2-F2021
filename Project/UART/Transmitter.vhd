@@ -4,7 +4,7 @@
 -- File          : Transmitter.vhd
 ----------------------------------------------------------------------------------------------
 -- Description : The transmitter receives an 8-bit data in parallel and outputs the bits 
---                serially in reverse order. (After the start bit is triggered from transmitterControl)
+--                serially in the correct order. (After the start bit is triggered from transmitterControl)
 --
 --              Example input data: 11110000,    Example output TxD (serial): 1 1 1 1 0 0 0 0 
 -----------------------------------------------------------------------------------------------
