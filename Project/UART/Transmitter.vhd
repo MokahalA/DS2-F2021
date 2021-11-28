@@ -4,9 +4,9 @@
 -- File          : Transmitter.vhd
 ----------------------------------------------------------------------------------------------
 -- Description : The transmitter receives an 8-bit data in parallel and outputs the bits 
---                serially in reverse order.
+--                serially in reverse order. (After the start bit is triggered from transmitterControl)
 --
---              Example input data: 11110000,    Example output TxD (serial): 0 0 0 0 1 1 1 1 
+--              Example input data: 11110000,    Example output TxD (serial): 1 1 1 1 0 0 0 0 
 -----------------------------------------------------------------------------------------------
 
 LIBRARY ieee;
@@ -64,6 +64,6 @@ begin
 
   transCtrl: transmitterControl port map(i_reset, i_BClk, i_TDRE, int_startBit, int_shiftTSR, int_loadTSR, int_loadTDR, o_TDRE);
 
-  o_TxD <= int_TxD(0) when int_startBit = '0' else '0';
+  o_TxD <= int_TxD(7) when int_startBit = '0' else '0';
 
 end architecture ; -- arch
