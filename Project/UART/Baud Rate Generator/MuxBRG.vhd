@@ -29,7 +29,7 @@ begin
                  i_d(5) WHEN "101",
                  i_d(6) WHEN "110",
                  i_d(7) WHEN "111",
-        	     "0" WHEN OTHERS;
+        	     '0' WHEN OTHERS;
 
     -- Output driver
     o_q <= int_q;
