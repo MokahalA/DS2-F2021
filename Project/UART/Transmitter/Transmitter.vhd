@@ -17,7 +17,7 @@ entity Transmitter is
     i_reset : IN STD_LOGIC;
     i_BClk : IN STD_LOGIC;
     i_TDRE : IN STD_LOGIC;
-    i_Data : IN STD_LOGIC_VECTOR(7 downto 0);
+    i_Data : IN STD_LOGIC_VECTOR(1 downto 0);
     o_TDRE : OUT STD_LOGIC;
     o_TxD : OUT STD_LOGIC
   ) ;
@@ -25,7 +25,7 @@ end Transmitter ;
 
 architecture arch of Transmitter is
 	SIGNAL int_loadTDR, int_loadTSR, int_startBit, int_shiftTSR : STD_LOGIC;
-	SIGNAL int_tdrOut, int_TxD : STD_LOGIC_VECTOR(7 downto 0);
+	SIGNAL int_tdrOut, int_TxD, int_Data : STD_LOGIC_VECTOR(7 downto 0);
 
     COMPONENT eightBitRegister IS 
       PORT(
@@ -58,11 +58,22 @@ architecture arch of Transmitter is
 
 begin
 
-  TDR: eightBitRegister port map(i_reset, int_loadTDR, i_BClk, i_Data, int_tdrOut);
+  TDR: eightBitRegister port map(i_reset, int_loadTDR, i_BClk, int_Data, int_tdrOut);
 
   TSR: trShiftRegister port map(i_reset, i_BClk, int_loadTSR, '0', int_shiftTSR, int_tdrOut, int_TxD);
 
   transCtrl: transmitterControl port map(i_reset, i_BClk, i_TDRE, int_startBit, int_shiftTSR, int_loadTSR, int_loadTDR, o_TDRE);
+
+  process(i_Data)
+    begin 
+      CASE i_Data is 
+        when "00" => int_Data <= "01000001";
+        when "01" => int_Data <= "01000010";
+        when "10" => int_Data <= "01000011";
+        when "11" => int_Data <= "01000100";
+        when OTHERS => int_Data <= "00000000";
+      end case;
+  end process;
 
   o_TxD <= int_TxD(7) when int_startBit = '0' else '0';
 

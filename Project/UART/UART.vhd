@@ -9,11 +9,14 @@
 --                and write the register of the UART.
 -----------------------------------------------------------------------------------------------
 
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
 entity UART is
   port (
     i_clock : IN STD_LOGIC;
     i_reset : IN STD_LOGIC;
-    i_Data : IN STD_LOGIC_VECTOR(7 downto 0);  --Input from the BUS
+    i_Data : IN STD_LOGIC_VECTOR(1 downto 0);  --Input from the BUS
     i_SEL : IN STD_LOGIC_VECTOR(2 downto 0); 
     i_RxD : IN STD_LOGIC;
     o_Data : OUT STD_LOGIC_VECTOR(7 downto 0); --Output to the BUS
@@ -28,7 +31,7 @@ architecture arch of UART is
         i_reset : IN STD_LOGIC;
         i_BClk : IN STD_LOGIC;
         i_TDRE : IN STD_LOGIC;
-        i_Data : IN STD_LOGIC_VECTOR(7 downto 0);
+        i_Data : IN STD_LOGIC_VECTOR(1 downto 0);
         o_TDRE : OUT STD_LOGIC;
         o_TxD : OUT STD_LOGIC
       ) ;
@@ -71,11 +74,11 @@ architecture arch of UART is
 
 begin
 
-  Receiver: Receiver port map (i_reset, int_BClkx8, i_RxD, FromSCSR_RDRF, ToSCSR_RDRF, o_Data);
+  rcvr: Receiver port map (i_reset, int_BClkx8, i_RxD, FromSCSR_RDRF, ToSCSR_RDRF, o_Data);
 
-  BaudRateGenerator: BaudRateGenerator port map (i_reset, i_clock, i_SEL, int_BClkx8, int_BClk);
+  brg: BaudRateGenerator port map (i_reset, i_clock, i_SEL, int_BClkx8, int_BClk);
 
-  Transmitter: Transmitter port map (i_reset, int_BClk, FromSCSR_TDRE, i_Data, ToSCSR_TDRE, o_TxD);
+  trans1: Transmitter port map (i_reset, int_BClk, FromSCSR_TDRE, i_Data, ToSCSR_TDRE, o_TxD);
 
   RDRF: enASdFF_2 port map (i_reset, ToSCSR_RDRF, '1', i_clock, FromSCSR_RDRF);
 
